@@ -7,7 +7,12 @@ class SinhVien(models.Model):
     masv = models.CharField(unique=True, max_length=200, verbose_name='Mã sinh viên')
     ho_ten = models.CharField(max_length=200, default='', verbose_name='Họ tên')
     gioi_tinh = models.BooleanField(default=False, verbose_name='Giới tính')
-    ngay_sinh = models.DateField(auto_now_add=True)
+    ngay_sinh = models.DateField(null=True, blank=True)
+
+    @property
+    def get_year(self):
+        return self.ngay_sinh
+
 
     def __str__(self):
         return self.ho_ten
