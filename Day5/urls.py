@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from myapp.views import IndexView, GetClass, HelloView
+from myapp.views import IndexView, GetClass, HelloView, GetSinhVienLopHoc, TinhTong, APIGiongFacebook
 from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
@@ -25,5 +25,9 @@ urlpatterns = [
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('hello/', HelloView.as_view(), name='hello'),
+    path('api2/<id_sv_lh>', GetSinhVienLopHoc.as_view()),
+    path('tinhtong/', TinhTong.as_view()),
+    path('me/', APIGiongFacebook.as_view())
+
 
 ]

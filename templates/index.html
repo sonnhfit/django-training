@@ -7,6 +7,16 @@
 </head>
 <body>
 
+<input type="text" id="soa">
+<input type="text" id="sob">
+<button onclick="submit_data()">Tong 2  so</button>
+
+<h3>Ket qua tinh tong <span style="color:red" id="kqtinhtong"></span></h3>
+
+<button onclick="binding_data()">get data</button>
+
+<h3>Giờ học: <span id="giohoc"></span></h3>
+<h3>Ho ten sinh viên: <span id="hoten"></span></h3>
 <h1>My First Heading</h1>
 <p>xin chao cac ban, <strong>{{ var1 }} </strong></p>
 
@@ -34,8 +44,50 @@
 
 <img src="{% static 'img/Capture.PNG' %}" alt="">
 
- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
+<script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+
+<script>
+
+    function binding_data()
+    {
+         $.get("http://127.0.0.1:8000/api2/1", function(data, status){
+            console.log(data);
+
+            $("#giohoc").text(data['gio_hoc']);
+            $("#hoten").text(data['sinh_vien']['ho_ten']);
+          });
+
+    }
+
+
+    function submit_data()
+    {
+                var soa = $("#soa").val();
+                var sob = $("#sob").val();
+
+                var mydata = JSON.stringify({
+                    a: soa,
+                    b: sob,
+
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/tinhtong/',
+                    data: mydata,
+                    contentType: "application/json",
+                    //dataType: 'json'
+                }).done(function (data, statusText, xhr) {
+                    var status = xhr.status;
+                    console.log(data['ketqua']);
+
+                    $("#kqtinhtong").text(data['ketqua']);
+
+                }).fail(function (xhr, textStatus, errorThrown) {
+                    alert("Lỗi kết nối mạng")
+                });
+
+    }
+</script>
+
 </html>

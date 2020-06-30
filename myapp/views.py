@@ -4,8 +4,9 @@ from .models import SinhVien
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import LopHoc
-from .serializers import LopHocSerializer, TestSerializer
+from .models import LopHoc, SinhVienLopHoc
+from .serializers import (LopHocSerializer, TestSerializer,
+                          SinhVienLopHocSerializer, SinhVienLopHocMDSerializer, TinhTongSerializer)
 from rest_framework import status
 # Create your views here.
 
@@ -56,3 +57,56 @@ class HelloView(APIView):
         content = {'message': 'Hello {0}, World!'.format(request.user.username)}
         return Response(content)
 # JWT
+
+
+class GetSinhVienLopHoc(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, id_sv_lh):
+        svlh = SinhVienLopHoc.objects.get(id=id_sv_lh)
+
+        data = SinhVienLopHocMDSerializer(instance=svlh)
+
+        return Response(data=data.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        pass
+
+    def delete(self, request):
+        pass
+
+    def put(self, request):
+        pass
+
+
+
+class TinhTong(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        tinhtongser = TinhTongSerializer(data=request.data)
+
+        if not tinhtongser.is_valid():
+            return Response('sai du lieu', status=status.HTTP_400_BAD_REQUEST)
+
+        a = tinhtongser.data['a']
+        b = tinhtongser.data['b']
+
+        c = int(a) + int(b)
+
+        data = {
+            'ketqua': c
+        }
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class APIGiongFacebook(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        data = {
+          "name": "Nguyễn Sơn",
+          "id": "1014028002074112"
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
